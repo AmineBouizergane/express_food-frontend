@@ -1,0 +1,76 @@
+<div class="container mt-4">
+
+  <div class="row">
+    <div class="col-md-3"  *ngIf="categoryList$ | async as categoryList">
+      <div class="sticky-top">
+        <div class="sidebar">
+          <h5>Categories</h5>
+          <ul class="list-group">
+            <li class="list-group-item" (click)="selectCategory(null)">All categories</li>
+            <li class="list-group-item" *ngFor="let category of categoryList" (click)="selectCategory(category.categoryId)">
+              {{ category.name }}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Product container -->
+    <div class="col-md-9">
+      <!-- Search bar -->
+      <div class="row">
+        <div class="col-md-6 offset-md-3">
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Search for products..." [(ngModel)]="searchKeyword">
+            <button class="btn btn-primary" type="button" (click)="searchProducts()">Search</button>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="productPage$ | async as productPage">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-3" id="productContainer">
+          <!-- Your product cards -->
+          <div class="col" *ngFor="let p of productPage.content">
+            <div class="card mb-4 p-4">
+              <img class="card-img-top" [src]="p.imageUrl" alt="Card image cap" height="200">
+              <div class="card-body">
+                <h5 class="card-title">{{p.name}}</h5>
+                <div class="rating">
+                  <span *ngFor="let star of [1, 2, 3, 4, 5]" class="fa fa-star"  [ngClass]="{'checked': star <= 4}"></span>
+                </div>
+                <h6 class="card-subtitle mb-2 mt-2 text-muted">{{p.unitPrice}} ₽ /per {{p.unite.label}}</h6>
+                <div class="button-group">
+                  <button class="btn btn-outline-primary me-2" (click)="addToCart(p.productId);"><i class="fa fa-cart-plus fa-lg" aria-hidden="true"></i></button>
+                  <a [routerLink]="'../productDetails/' + p.productId" class="btn btn-outline-secondary"><i class="fa fa-ellipsis-h fa-lg" aria-hidden="true"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>       
+        <!-- Pagination controls -->
+        <nav aria-label="Pagination">
+          <ul class="pagination">
+            <li class="page-item" [class.disabled]="productPage.page === 0">
+              <a class="page-link" (click)="previousPage()">Previous</a>
+            </li>
+            <ng-container *ngFor="let pageNumber of generatePageNumbers(productPage.totalPage)">
+              <li class="page-item" [class.active]="pageNumber === currentPage">
+                <a class="page-link" (click)="goToPage(pageNumber)">{{pageNumber + 1}}</a>
+              </li>
+            </ng-container>
+            <li class="page-item" [class.disabled]="productPage.page === productPage.totalPage - 1">
+              <a class="page-link" (click)="nextPage()">Next</a>
+            </li>
+          </ul>
+        </nav>
+        
+      </div>
+      <ng-container *ngIf="!(productPage$ | async)">
+        <!-- Show "No product found" message -->
+        <div style="display: flex; justify-content: center; align-items: center;">
+          <img class="card-img-top" src="assets/img/No_Product.png" style="max-width: 60%; height: auto;">
+        </div>
+      </ng-container>
+      
+    </div>
+  </div>
+</div>

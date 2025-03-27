@@ -1,0 +1,16 @@
+#footer{
+    text-align: center;
+    position: fixed;
+    margin-left: 530px;
+    bottom: 0px
+}
+
+.full-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #343a40;
+    color: white;
+  }

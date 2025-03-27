@@ -1,0 +1,5 @@
+@import "font-awesome/css/font-awesome.min.css";
+
+.with-navbar {
+    padding-top: 56px; /* Adjust the padding-top value based on your navbar height */
+  }

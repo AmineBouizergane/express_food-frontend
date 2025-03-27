@@ -1,1 +1,39 @@
 /* You can add global styles to this file, and also import other style files */
+@import 'font-awesome/css/font-awesome.min.css';
+@import 'bootstrap/dist/css/bootstrap.min.css';
+
+.button-group {
+  display: flex;
+  margin-top: 10px;
+  justify-content: flex-end;
+}
+
+.rating {
+  color: lightgray; /* Change star color */
+}
+
+.fa-star {
+  font-size: 1.2em; /* Adjust star size */
+  cursor: pointer;
+}
+
+.checked {
+  color: orange; /* Change color of filled stars */
+}
+
+.list-group-item {
+  transition: background-color 0.3s; /* Add transition for smooth effect */
+}
+
+.list-group-item:hover {
+  background-color: #f0f0f0; /* Change background color on hover */
+  cursor: pointer; /* Change cursor to pointer on hover */
+}
+
+
+
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+

@@ -1,0 +1,55 @@
+<div class="container" *ngIf="productFormGroup">
+  <div class="card m-4">
+    <div class="card-header">
+      Add new product
+    </div>
+    <div class="card-body">
+      <form [formGroup]="productFormGroup">       
+        <div class="mb-3">
+          <label for="formFile" class="form-label">Product picture</label>
+          <input class="form-control" type="file" id="formFile" (change)="onFileSelected($event)" accept="image/*">
+          <div *ngIf="uploadProgress !== null">
+            <progress [value]="uploadProgress" max="100"></progress> {{ uploadProgress }}%
+          </div>
+        </div>
+        <div class="mb-3">
+          <input type="hidden" class="form-control" formControlName="productId">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Name</label>
+          <input type="text" class="form-control" formControlName="name">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Description</label>
+          <textarea class="form-control" formControlName="description" rows="5"></textarea>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Unit Price</label>
+          <input type="number" class="form-control" formControlName="unitPrice">
+        </div> 
+        <div class="mb-3">
+          <label class="form-label">Whole Sale Price</label>
+          <input type="number" class="form-control" formControlName="wholesalePrice">
+        </div>
+        <div class="mb-3" *ngIf="unitOptions$ | async as unitOptions">
+          <label class="form-label">Unit</label>
+          <select class="form-select" formControlName="unite">
+            <option *ngFor="let unit of unitOptions" [value]="unit.uniteId">{{ unit.label }}</option>
+          </select>
+        </div>
+        
+        <div class="mb-3" *ngIf="categoryOptions$ | async as categoryOptions">
+          <label class="form-label">Category</label>
+          <select class="form-select" formControlName="category">
+            <option *ngFor="let category of categoryOptions" [value]="category.categoryId">{{ category.name }}</option>
+          </select>
+        </div>
+        <div class="mb-3 form-check">
+          <label class="form-check-label">Available</label>
+          <input type="checkbox" class="form-check-input" formControlName="isAvailable">
+        </div>
+        <button type="submit" (click)="onSaveProduct()" class="btn btn-primary">Save</button>
+      </form>
+    </div>
+  </div>
+</div>

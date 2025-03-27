@@ -1,0 +1,111 @@
+<div class="p-4">
+  <div class="container">
+    <h4 class="pt-4">Category management</h4>
+  </div>
+  <div class="row justify-content-end m-4">
+      <div class="col-auto">
+        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
+          Add Category
+        </button>
+
+        <!-- Add Category Modal -->
+        <div class="modal fade" id="addCategoryModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="addCategoryModalLabel">Add category</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <form [formGroup]="categoryForm">
+                  <div class="mb-3">
+                    <label for="label" class="col-form-label">Label :</label>
+                    <input type="text" formControlName="name" placeholder="Category label ..." class="form-control" id="label">
+                  </div>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" (click)="addCategory()" class="btn btn-success" [disabled]="categoryForm.invalid" data-bs-dismiss="modal">Add</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+  
+  <div class="container">
+      <ng-container *ngIf="categoryPage$ | async as categoryPage">
+        <ng-container>
+          <div class="row d-flex justify-content-center align-items-center">
+            <div class="col-lg-8 col-xl-8">
+              <table class="table align-middle mb-0">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Label</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let c of categoryPage">
+                    <td>{{c.categoryId}}</td>
+                    <td>{{c.name}}</td>
+                    <td>
+                      <button class="btn btn-sm btn-outline-danger m-1" data-bs-toggle="modal" [attr.data-bs-target]="'#deleteCategoryModal' + c.categoryId">
+                        <span class="fa fa-trash"></span> Delete
+                      </button>
+                      <!-- Delete Category Modal -->
+                      <div class="modal fade" id="deleteCategoryModal{{c.categoryId}}" tabindex="-1" aria-labelledby="deleteCategoryModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="deleteCategoryModalLabel">Delete confirmation</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                              Are you sure you want to delete "{{c.name}}" category ?
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-success" data-bs-dismiss="modal" (click)="onDelete(c.categoryId)">Yes</button>
+                              <button type="button" class="btn btn-danger" data-bs-dismiss="modal">No</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <button class="btn btn-sm btn-outline-primary m-1" data-bs-toggle="modal" [attr.data-bs-target]="'#editCategoryModal' + c.categoryId" (click)="onEdit(c)">
+                        <span class="fa fa-pencil"></span> Edit
+                      </button>
+
+                      <!-- Edit Category Modal -->
+                      <div class="modal fade" id="editCategoryModal{{c.categoryId}}" tabindex="-1" aria-labelledby="editCategoryModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="editCategoryModalLabel">Edit category</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                              <form [formGroup]="editCategoryForm">
+                                <div class="mb-3">
+                                  <label for="editLabel" class="col-form-label">Label :</label>
+                                  <input type="text" formControlName="name" placeholder="Category label ..." class="form-control" id="editLabel">
+                                </div>
+                              </form>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" (click)="updateCategory(c.categoryId)" class="btn btn-success" [disabled]="editCategoryForm.invalid" data-bs-dismiss="modal">Save</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>          
+              </table>
+            </div>         
+          </div>
+        </ng-container>
+      </ng-container>
+    </div>
+</div>

@@ -1,0 +1,208 @@
+<div *ngIf="orderPage$ | async as orderPage">  
+  <div class="pt-4 ms-4">
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="d-flex align-items-center mb-2">
+        <i class="bi bi-box-seam me-2" style="font-size: 2rem;"></i>
+        <h2 class="fw-bold mb-0">Orders Management</h2>
+      </div>
+    </div>
+  </div>
+  <div class="container-fluid mt-2">
+    <div class="row">
+      <!-- Sidebar -->
+      <div class="col-md-3 py-2">
+        <div class="p-3 bg-light rounded">
+          <h4>Filters</h4>
+          <form (submit)="searchByFilter()">
+            <!-- Status Filter -->
+            <div class="mb-3">
+              <label for="statusFilter" class="form-label">Status</label>
+              <select class="form-select" id="statusFilter" [(ngModel)]="filterStatus" name="status">
+                <option value="">Choose status...</option>
+                <option value="1">Pending</option>
+                <option value="2">In Process</option>
+                <option value="3">Ready for dispatch</option>
+                <option value="4">Dispatched</option>
+                <option value="5">Delivered</option>
+                <option value="6">Paid</option>
+                <option value="7">Cancelled</option>
+                <option value="8">Rejected</option>
+                <option value="9">Returned</option>
+              </select>
+            </div>
+            <!-- Delivery Date Filter -->
+            <div class="mb-3">
+              <label for="deliveryDate" class="form-label">Delivery Date</label>
+              <input type="date" class="form-control" id="deliveryDate" [(ngModel)]="filterDeliveryDate" name="deliveryDate">
+            </div>
+            <button type="submit" class="btn btn-primary">Apply Filters</button>
+          </form>
+        </div>
+      </div>
+      <!-- Orders List -->
+      <div class="col-md-9">
+        <div class="container py-2">
+          <div class="row d-flex justify-content-center align-items-center h-100 mt-2" *ngFor="let o of orderPage.content">
+            <div class="col">
+              <div class="card" style="border-radius: 10px;">
+                <div class="card-body p-4">           
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-flex flex-column">
+                      <span class="lead fw-normal">Order N°#{{o.orderId}}</span>
+                      <span class="text-muted small">Item number : {{o.orderItems.length}}</span>                          
+                      <span class="text-muted small">Expected Arrival : {{o.deliveryDate}}</span>   
+                      <span class="text-muted small">Status : <span [ngClass]="'badge ' + statusBadgeMap[o.status.statusId]">
+                        {{ o.status.label }}
+                      </span></span>    
+                      <span class="text-muted small">Total price : {{o.totalPrice}} ₽ </span>  
+                    </div>
+                    <div>
+                      <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" [attr.data-bs-target]="'#orderDetails' + o.orderId" (click)="onShowDetails(getCookId(o), getDeliveryId(o))">
+                        Track order details
+                      </button>
+                      <!-- Modal -->
+                      <div class="modal fade" id="orderDetails{{o.orderId}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h1 class="modal-title fs-5" id="exampleModalLabel">Order details</h1>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                              <section class="h-100 gradient-custom">
+                                <div class="container py-3 h-100">
+                                  <div class="row d-flex justify-content-center align-items-center h-100">
+                                    <div class="col-lg-12 col-xl-12">
+                                      <div class="card" style="border-radius: 10px;">
+                                        <div class="card-header px-3 py-2">
+                                          <h5 class="text-muted mb-0">Order N°#{{o.orderId}}</h5>
+                                        </div>
+                                        <div class="card-body p-4">
+                                          <div class="card shadow-0 border mb-4" *ngFor="let item of o.orderItems">
+                                            <div class="card-body">
+                                              <div class="row">
+                                                <div class="col-md-2">
+                                                  <img [src]="item.product.imageUrl"
+                                                    class="img-fluid" alt="Phone">
+                                                </div>
+                                                <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                                  <p class="text-muted mb-0">{{item.product.name}}</p>
+                                                </div>
+                                                <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                                  <p class="text-muted mb-0 small">{{item.unitePrice}} ₽ /per {{item.product.unite.label}}</p>
+                                                </div>
+                                                <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                                  <p class="text-muted mb-0 small">Qty: {{item.qte}}</p>
+                                                </div>
+                                                <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                                  <p class="text-muted mb-0 small">Total : {{item.totalPrice}} ₽</p>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                              
+                                          <div class="d-flex justify-content-between pt-2">
+                                            <p class="fw-bold mb-0">Order Details</p>
+                                            <p class="text-muted mb-0"><span [ngClass]="'badge ' + statusBadgeMap[o.status.statusId]">{{ o.status.label }}</span></p>
+                                          </div>
+
+                                          <div class="d-flex justify-content-between">
+                                            <p class="text-muted mb-0">Client name: {{o.client.lastName}} {{o.client.firstName}}</p>
+                                            <p class="text-muted mb-0"></p>
+                                          </div>
+                                          
+                                          <div class="d-flex justify-content-between">
+                                            <p class="text-muted mb-0">Order Date : {{o.createdDate}}</p>
+                                            <p class="text-muted mb-0"><span class="fw-bold me-4"> Item number</span>{{o.orderItems.length}} item</p>
+                                          </div>
+                              
+                                          <div class="d-flex justify-content-between mb-3">
+                                            <p class="text-muted mb-0">
+                                                <label for="estimatedDate" class="form-label">Expected Arrival : </label>
+                                                <span >{{ o.deliveryDate }}</span>
+                                            </p>
+                                            <p class="text-muted mb-0"><span class="fw-bold me-4">Total</span> {{o.totalPrice}} ₽</p>
+                                          </div>
+
+                                          <div class="d-flex justify-content-between mb-3">
+                                            <p class="fw-bold mb-0">Cook 
+                                              <ng-container *ngIf="o.cook && o.status.statusId != 1">
+                                                  <input type="text" class="form-control" [value]="o.cook.firstName + ' ' + o.cook.lastName" disabled>
+                                              </ng-container>    
+                                              <ng-container *ngIf="o.cook && o.status.statusId == 1">
+                                                <select class="form-select" aria-label="Default select example" [(ngModel)]="selectedCook">
+                                                  <option selected>Choose a cook</option>
+                                                  <ng-container *ngIf="cooks$ | async as cooks">
+                                                    <option *ngFor="let c of cooks" [ngValue]="c.id" [selected]="o.cook.id === c.id">
+                                                      {{ c.firstName }} {{ c.lastName }}
+                                                    </option>
+                                                  </ng-container>
+                                                </select>
+                                              </ng-container>   
+                                              <ng-container *ngIf="!o.cook && o.status.statusId == 1">
+                                                <select class="form-select" aria-label="Default select example" [(ngModel)]="selectedCook">
+                                                  <option selected>Choose a cook</option>
+                                                  <ng-container *ngIf="cooks$ | async as cooks">
+                                                    <option *ngFor="let c of cooks" [ngValue]="c.id">
+                                                      {{ c.firstName }} {{ c.lastName }}
+                                                    </option>
+                                                  </ng-container>
+                                                </select>
+                                              </ng-container>                                                                                                                         
+                                            </p>
+                                            <p class="fw-bold mb-0">Delivery 
+                                                <ng-container *ngIf="o.status.statusId <= 2">
+                                                    <select class="form-select" aria-label="Default select example" disabled>
+                                                        <option selected>Choose a delivery person</option>
+                                                    </select>
+                                                </ng-container>
+                                                <ng-container *ngIf="o.deliveryPerson && o.status.statusId === 3">
+                                                    <select class="form-select" aria-label="Default select example" [(ngModel)]="selectedDelivery">
+                                                        <option selected>Choose a delivery person</option>
+                                                        <ng-container *ngIf="deliveries$ | async as deliveries">
+                                                            <option *ngFor="let d of deliveries" [value]="d.id" [selected]="o.deliveryPerson.id === d.id">
+                                                                {{ d.firstName }} {{ d.lastName }}
+                                                            </option>
+                                                        </ng-container>
+                                                    </select>
+                                                </ng-container>
+                                                <ng-container *ngIf="!o.deliveryPerson && o.status.statusId === 3">
+                                                  <select class="form-select" aria-label="Default select example" [(ngModel)]="selectedDelivery">
+                                                      <option selected>Choose a delivery person</option>
+                                                      <ng-container *ngIf="deliveries$ | async as deliveries">
+                                                          <option *ngFor="let d of deliveries" [value]="d.id">
+                                                              {{ d.firstName }} {{ d.lastName }}
+                                                          </option>
+                                                      </ng-container>
+                                                  </select>
+                                              </ng-container>
+                                                <ng-container *ngIf="o.status.statusId > 3">
+                                                  <input type="text" class="form-control" [value]="o.deliveryPerson.firstName + ' ' + o.deliveryPerson.lastName" disabled>
+                                              </ng-container>
+                                            </p>
+                                            <p class="fw-bold mb-0"><br>
+                                              <button type="button" class="btn btn-primary" *ngIf="o.status.statusId <= 4" (click)="onSave(o)" data-bs-dismiss="modal">Save</button>
+                                            </p>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </section>
+                            </div>
+                            <div>
+                          </div>
+                        </div>
+                      </div> 
+                    </div>
+                  </div>      
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

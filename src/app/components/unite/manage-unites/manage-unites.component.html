@@ -1,0 +1,111 @@
+<div class="p-4">
+  <div class="container">
+    <h4 class="pt-4">Unit management</h4>
+  </div>
+  <div class="row justify-content-end m-4">
+      <div class="col-auto">
+        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addUnitModal">
+          Add unite
+        </button>
+
+        <!-- Add Unit Modal -->
+        <div class="modal fade" id="addUnitModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addUnitModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="addUnitModalLabel">Add Unit</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <form [formGroup]="unitForm">
+                  <div class="mb-3">
+                    <label for="label" class="col-form-label">Label :</label>
+                    <input type="text" formControlName="name" placeholder="Unit label ..." class="form-control" id="label">
+                  </div>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" (click)="addUnit()" class="btn btn-success" [disabled]="unitForm.invalid" data-bs-dismiss="modal">Add</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+  
+  <div class="container">
+      <ng-container *ngIf="unitePage$ | async as unitePage">
+        <ng-container>
+          <div class="row d-flex justify-content-center align-items-center">
+            <div class="col-lg-8 col-xl-8">
+              <table class="table align-middle mb-0">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Label</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let u of unitePage">
+                    <td>{{u.uniteId}}</td>
+                    <td>{{u.label}}</td>
+                    <td>
+                      <button class="btn btn-sm btn-outline-danger m-1" data-bs-toggle="modal" [attr.data-bs-target]="'#deleteUnitModal' + u.uniteId">
+                        <span class="fa fa-trash"></span> Delete
+                      </button>
+                      <!-- Delete Unit Modal -->
+                      <div class="modal fade" id="deleteUnitModal{{u.uniteId}}" tabindex="-1" aria-labelledby="deleteUnitryModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="deleteUnitModalLabel">Delete confirmation</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                              Are you sure you want to delete "{{u.label}}" unit ?
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-success" data-bs-dismiss="modal" (click)="onDelete(u.uniteId)">Yes</button>
+                              <button type="button" class="btn btn-danger" data-bs-dismiss="modal">No</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <button class="btn btn-sm btn-outline-primary m-1" data-bs-toggle="modal" [attr.data-bs-target]="'#editUnitModal' + u.uniteId" (click)="onEdit(u)">
+                        <span class="fa fa-pencil"></span> Edit
+                      </button>
+
+                      <!-- Edit Unit Modal -->
+                      <div class="modal fade" id="editUnitModal{{u.uniteId}}" tabindex="-1" aria-labelledby="editUnitModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="editUnitModalLabel">Edit unit</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                              <form [formGroup]="editUnitForm">
+                                <div class="mb-3">
+                                  <label for="editLabel" class="col-form-label">Label :</label>
+                                  <input type="text" formControlName="name" placeholder="Unit label ..." class="form-control" id="editLabel">
+                                </div>
+                              </form>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" (click)="updateUnit(u.uniteId)" class="btn btn-success" [disabled]="editUnitForm.invalid" data-bs-dismiss="modal">Save</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>          
+              </table>
+            </div>         
+          </div>
+        </ng-container>
+      </ng-container>
+    </div>
+</div>

@@ -1,0 +1,133 @@
+<div *ngIf="orderPage$ | async as orderPage">  
+  <div class="pt-4 ms-4">
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="d-flex align-items-center mb-2">
+        <i class="bi bi-box-seam me-2" style="font-size: 2rem;"></i>
+        <h2 class="fw-bold mb-0">Your affected orders</h2>
+      </div>
+    </div>
+  </div>
+  <div>
+      <div class="container py-2">
+          <div class="row d-flex justify-content-center align-items-center h-100 mt-2"  *ngFor="let o of orderPage.content">
+              <div class="col">
+                  <div class="card" style="border-radius: 10px;">
+                      <div class="card-body p-4">           
+                          <div class="d-flex justify-content-between align-items-center">
+                              <div class="d-flex flex-column">
+                              <span class="lead fw-normal">Order N°#{{o.orderId}}</span>
+                              <span class="text-muted small">Item number : {{o.orderItems.length}}</span>                          
+                              <span class="text-muted small">Expected Arrival : {{o.deliveryDate}}</span>
+                              <span class="text-muted small">Status : <span [ngClass]="'badge ' + statusBadgeMap[o.status.statusId]">
+                                {{ o.status.label }}
+                              </span></span>             
+                              <span class="text-muted small">Total price : {{o.totalPrice}} ₽ </span>  
+                              </div>
+                              <div>
+                                  <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" [attr.data-bs-target]="'#exampleModal' + o.orderId">
+                                      Track order details
+                                  </button>   
+                                  <!-- Modal -->
+                                  <div class="modal fade" id="exampleModal{{o.orderId}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                      <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+                                          <div class="modal-content">
+                                              <div class="modal-header">
+                                                  <h1 class="modal-title fs-5" id="exampleModalLabel">Order details</h1>
+                                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                              </div>
+                                              <div class="modal-body">
+                                                  <section class="h-100 gradient-custom">
+                                                      <div class="container py-3 h-100">
+                                                        <div class="row d-flex justify-content-center align-items-center h-100">
+                                                          <div class="col-lg-12 col-xl-12">
+                                                            <div class="card" style="border-radius: 10px;">
+                                                              <div class="card-header px-3 py-2">
+                                                                <h5 class="text-muted mb-0">Order N°#{{o.orderId}}</h5>
+                                                              </div>
+                                                              <div class="card-body p-4">
+                                                                <div class="card shadow-0 border mb-4" *ngFor="let item of o.orderItems">
+                                                                  <div class="card-body">
+                                                                    <div class="row">
+                                                                      <div class="col-md-2">
+                                                                        <img [src]="item.product.imageUrl"
+                                                                          class="img-fluid" alt="Phone">
+                                                                      </div>
+                                                                      <div class="col-md-3 text-center d-flex justify-content-center align-items-center">
+                                                                        <p class="text-muted mb-0">{{item.product.name}}</p>
+                                                                      </div>
+                                                                      <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                                                        <p class="text-muted mb-0 small">Qty: {{item.qte}}</p>
+                                                                      </div>
+                                                                      <div class="col-md-3 text-center d-flex justify-content-center align-items-center">
+                                                                        <p class="text-muted mb-0 small">{{item.unitePrice}} ₽ /per {{item.product.unite.label}}</p>
+                                                                      </div>
+                                                                      <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                                                        <p class="text-muted mb-0 small">Total : {{item.totalPrice}} ₽</p>
+                                                                      </div>
+                                                                    </div>
+                                                                  </div>
+                                                                </div>
+                                                                <div class="d-flex justify-content-between pt-2">
+                                                                  <p class="fw-bold mb-0">Description</p>
+                                                                  <p class="text-muted mb-0"><span class="fw-bold me-4"></span></p>
+                                                                </div>
+
+                                                                
+                                                                <div class="d-flex justify-content-between pt-2">
+                                                                  <p class="text-muted mb-0">{{o.description}}</p>
+                                                                </div>
+                                                    
+                                                                <div class="d-flex justify-content-between pt-2">
+                                                                  <p class="fw-bold mb-0">Order Details</p>
+                                                                  <p class="text-muted mb-0"><span class="fw-bold me-4"></span></p>
+                                                                </div>
+                                                    
+                                                                <div class="d-flex justify-content-between">
+                                                                  <p class="text-muted mb-0">Order Created at : {{o.createdDate}}</p>
+                                                                  <p class="text-muted mb-0"></p>
+                                                                </div>
+                                                    
+                                                                <div class="d-flex justify-content-between mb-5">
+                                                                  <p class="text-muted mb-0">Expected Arrival :  {{o.deliveryDate}}</p>
+                                                                  <p class="text-muted mb-0"><span class="fw-bold me-4">Total</span> {{o.totalPrice}} ₽</p>
+                                                                </div>
+                                                              </div>
+                                                            </div>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                    </section>
+                                              </div>
+                                              <div class="modal-footer">
+                                                <div class="row justify-content-end m-4">
+                                                  <div class="col-auto" *ngIf="o.status.statusId === 1">
+                                                    <button (click)="changeStatus(o.orderId, 2)" type="button" class="btn btn-success" data-bs-dismiss="modal"><i class="fa fa-play me-2" aria-hidden="true"></i>Start the process</button>
+                                                  </div> 
+                                                  <div class="col-auto" *ngIf="o.status.statusId === 2">
+                                                    <button (click)="changeStatus(o.orderId, 3)" type="button" class="btn btn-success" data-bs-dismiss="modal"><i class="fa fa-bell me-2" aria-hidden="true"></i> Ready to be delivered</button>
+                                                  </div> 
+                                                  <div class="col-auto" *ngIf="o.status.statusId === 3">
+                                                    <button (click)="changeStatus(o.orderId,4)" type="button" class="btn btn-success"  data-bs-dismiss="modal"><i class="fa fa-check me-2" aria-hidden="true"></i> Dispatched</button>
+                                                  </div>
+                                                  <div class="col-auto" *ngIf="o.status.statusId === 4">
+                                                    <button (click)="changeStatus(o.orderId,5)" type="button" class="btn btn-success"  data-bs-dismiss="modal"><i class="fa fa-check me-2" aria-hidden="true"></i> Delivered</button>
+                                                  </div> 
+                                                  <div class="col-auto" *ngIf="o.status.statusId === 5">
+                                                    <button (click)="changeStatus(o.orderId,6)" type="button" class="btn btn-success" data-bs-dismiss="modal"><i class="fa fa-money me-2" aria-hidden="true"></i> Paid</button>
+                                                  </div>  
+                                                  <div class="col-auto" *ngIf="o.status.statusId === 4">
+                                                    <button (click)="changeStatus(o.orderId,9)" type="button" class="btn btn-danger"  data-bs-dismiss="modal"><i class="fa fa-reply me-2" aria-hidden="true"></i> Returned</button>
+                                                  </div>       
+                                                </div>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div> 
+                              </div>
+                          </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
