@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  host:"http://localhost:8090",
+  host:"http://localhost:8080",
   headers: {
     'Authorization': `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhaG1lZF9tb3VuaXIiLCJyb2xlcyI6WyJERUxJVkVSWSIsIlVTRVIiXSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDkwL2xvZ2luIiwiZXhwIjoxNzE2NjU2MTkwfQ.-OUEKTdZwu_lJSANSJ1g2ysoCiqYluKAdLslULK271Q`
   },

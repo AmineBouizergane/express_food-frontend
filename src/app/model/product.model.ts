@@ -1,5 +1,6 @@
 import { Category } from "./category.model";
 import { Unite } from "./unite.model";
+import {FeedBack} from "./feedBack.model";
 
 export interface Product{
     productId : number;
@@ -7,8 +8,9 @@ export interface Product{
     imageUrl : String;
     description : String;
     unitPrice : number;
-    wholesalePrice : number;
     unite : Unite;
     category : Category;
     isAvailable : Boolean;
+    avgRating: number;
+    feedBacks: FeedBack[];
 }

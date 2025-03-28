@@ -14,9 +14,9 @@ export class AuthService {
   constructor(private http: HttpClient, private router: Router) { }
 
   login(username: string, password: string): Observable<void> {
-    return this.http.post<{accessToken: string}>(this.apiUrl, { username, password })
+    return this.http.post<{token: string}>(this.apiUrl, { username, password })
       .pipe(map(response => {
-        localStorage.setItem('jwtToken', response.accessToken);
+        localStorage.setItem('jwtToken', response.token);
       }));
   }
 

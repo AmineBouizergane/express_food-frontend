@@ -53,7 +53,7 @@ export class ViewCartComponent implements OnInit{
     if (!cartItem) {
       return; // If cartItem is not defined, return early
     }
-  
+
     // Call the cart service to remove the item from the cart
     this.cartService.removeCartItem(cartItem.cardItemId)
       .subscribe(() => {
@@ -81,26 +81,15 @@ export class ViewCartComponent implements OnInit{
     }
 
     let totalAmount = 0;
-  
+
     for (const cartItem of this.cart?.cartItems) {
       // Add the product of unit price and quantity to the total amount
       totalAmount += cartItem.price * cartItem.qte;
     }
-  
+
     return totalAmount;
   }
 
-  getDateRange(): string {
-    let currentDate = new Date();
-    let startDate = new Date(currentDate.setDate(currentDate.getDate() + 2));
-    let endDate = new Date(currentDate.setDate(currentDate.getDate() + 2));
-
-    let startDateString = startDate.toLocaleDateString('en-GB');
-    let endDateString = endDate.toLocaleDateString('en-GB');
-
-    return `${startDateString} - ${endDateString}`;
-  }
-  
   validateOrder(): void {
     const orderResponse = {
       address: this.address,

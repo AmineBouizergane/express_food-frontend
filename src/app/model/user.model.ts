@@ -1,10 +1,10 @@
 export interface User{
     id?:number;
-    firstName:String;
-    lastName:String;
+    firstName:string;
+    lastName:string;
     birthDay:Date;
-    phoneNumber:String;
-    address:String;
-    avatarUrl:String | null;
-    isActivated:Boolean;
+    phoneNumber:string;
+    address:string;
+    avatarUrl:string | null;
+    isActivated:boolean;
 }

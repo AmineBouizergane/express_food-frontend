@@ -12,7 +12,7 @@
                   <img class="card-img-top" src="assets/img/empty_cart.png" style="max-width: 60%; height: auto;">
                 </div>
               </ng-container>
-              
+
             <div class="card-body" *ngIf="cart && cart.cartItems.length > 0">
               <!-- Single item -->
               <ng-container *ngFor="let cartItem of cart?.cartItems">
@@ -28,7 +28,7 @@
                     </div>
                     <!-- Image -->
                   </div>
-    
+
                   <div class="col-lg-6 col-md-6 mb-4 mb-lg-0">
                     <!-- Data -->
                     <p><strong>{{ cartItem.product.name }}</strong></p>
@@ -36,31 +36,31 @@
                     <p>Total price: {{ cartItem.price * cartItem.qte | currency : '₽ '}}</p>
                     <!-- Data -->
                   </div>
-    
+
                   <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
                     <!-- Quantity -->
                     <div class="d-flex mb-4" style="max-width: 300px">
                       <button class="btn btn-primary px-3 me-2" (click)="decreaseQuantity(cartItem)">
                         <i class="fa fa-minus"></i>
                       </button>
-    
+
                       <div class="form-outline">
                         <input type="number" class="form-control text-center" [value]="cartItem.qte" disabled />
                       </div>
-    
+
                       <button class="btn btn-primary px-3 ms-2" (click)="increaseQuantity(cartItem)">
                         <i class="fa fa-plus"></i>
                       </button>
                     </div>
                     <!-- Quantity -->
-    
+
                     <!-- Price -->
-                    <p class="text-end">                  
+                    <p class="text-end">
                         <!-- Button trigger modal -->
                         <button type="button" class="btn btn-danger btn-sm me-1 mb-2" data-bs-toggle="modal" [attr.data-bs-target]="'#deleteItemConfirmation' + cartItem.cardItemId">
                             <i class="fa fa-trash"></i>
                         </button>
-                    </p>                   
+                    </p>
                     <!-- Modal -->
                     <div class="modal fade" id="deleteItemConfirmation{{cartItem.cardItemId}}" tabindex="-1" aria-labelledby="deleteItemConfirmationLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
@@ -87,24 +87,24 @@
               </ng-container>
             </div>
           </div>
-          
+
           <div class="card mb-4" *ngIf="cart && cart.cartItems.length > 0">
             <div class="card-body">
                 <p><strong>Description</strong></p>
                 <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="You can customize your order here" [(ngModel)]="description"></textarea>
-            </div>              
+            </div>
           </div>
           <div class="card mb-4" *ngIf="cart && cart.cartItems.length > 0">
             <div class="card-body">
-                <p><strong>Expected shipping delivery</strong></p>
-                <p class="mb-0">{{ getDateRange() }}</p>
-              </div>              
+                <p><strong>Expected shipping delivery in</strong></p>
+                <p class="mb-0">15 - 45 min</p>
+              </div>
           </div>
           <div class="card mb-4 mb-lg-0" *ngIf="cart && cart.cartItems.length > 0">
             <div class="card-body d-flex align-items-center">
-                <p><strong>Cash on delivery</strong></p>              
+                <p><strong>Cash on delivery</strong></p>
                 <img class="me-2" width="45px" src="assets/icon/cod.png" />
-            </div>              
+            </div>
           </div>
         </div>
         <div class="col-md-4">
@@ -142,7 +142,7 @@
               <button  type="button" class="btn btn-success btn-block"  data-bs-toggle="modal" data-bs-target="#validateOrderModal">
                 Validate order
               </button>
-                
+
                 <!-- Modal -->
                 <div class="modal fade" id="validateOrderModal" tabindex="-1" aria-labelledby="validateOrderModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">

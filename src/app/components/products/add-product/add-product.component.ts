@@ -31,7 +31,7 @@ export class AddProductComponent implements OnInit{
   uploadProgress: number | null = null;
   imageName : string = "";
 
-  constructor(private fb : FormBuilder, 
+  constructor(private fb : FormBuilder,
     private productService : ProductService,
     private uniteService:UniteService,
     private router:Router,
@@ -44,7 +44,6 @@ export class AddProductComponent implements OnInit{
       name:["", Validators.required],
       description : ["", Validators.required],
       unitPrice : [0, Validators.required],
-      wholesalePrice : [0, Validators.required],
       unite :["", Validators.required],
       category : ["", Validators.required],
       isAvailable : [true, Validators.required]

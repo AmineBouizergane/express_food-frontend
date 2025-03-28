@@ -4,7 +4,7 @@
       Add new product
     </div>
     <div class="card-body">
-      <form [formGroup]="productFormGroup">       
+      <form [formGroup]="productFormGroup">
         <div class="mb-3">
           <label for="formFile" class="form-label">Product picture</label>
           <input class="form-control" type="file" id="formFile" (change)="onFileSelected($event)" accept="image/*">
@@ -26,10 +26,6 @@
         <div class="mb-3">
           <label class="form-label">Unit Price</label>
           <input type="number" class="form-control" formControlName="unitPrice">
-        </div> 
-        <div class="mb-3">
-          <label class="form-label">Whole Sale Price</label>
-          <input type="number" class="form-control" formControlName="wholesalePrice">
         </div>
         <div class="mb-3" *ngIf="unitOptions$ | async as unitOptions">
           <label class="form-label">Unit</label>
@@ -37,7 +33,7 @@
             <option *ngFor="let unit of unitOptions" [value]="unit.uniteId">{{ unit.label }}</option>
           </select>
         </div>
-        
+
         <div class="mb-3" *ngIf="categoryOptions$ | async as categoryOptions">
           <label class="form-label">Category</label>
           <select class="form-select" formControlName="category">

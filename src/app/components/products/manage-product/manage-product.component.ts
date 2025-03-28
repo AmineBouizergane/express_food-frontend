@@ -86,7 +86,6 @@ export class ManageProductComponent implements OnInit {
       imageUrl: "",
       description: product.description,
       unitPrice: product.unitPrice,
-      wholesalePrice: product.wholesalePrice,
       unite: product.unite.uniteId,
       category: product.category.categoryId,
       isAvailable: product.isAvailable

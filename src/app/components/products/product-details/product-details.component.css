@@ -3,7 +3,17 @@
     background-color: white !important;
     color: #3b71ca !important;
   }
-  
+
   .icon-hover:hover i {
     color: #3b71ca !important;
   }
+
+.star-rating {
+  font-size: 24px;
+  color: gold;
+  cursor: pointer;
+}
+
+.star-rating .fa-star-o {
+  color: gray;
+}
